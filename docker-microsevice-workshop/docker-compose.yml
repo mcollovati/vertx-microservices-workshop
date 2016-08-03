@@ -1,0 +1,39 @@
+version: '2'
+services:
+  quotegenerator:
+    image: vertx-microservice-workshop/quote-generator
+    ports:
+     - "8081:8080"
+  portfolio:
+    image: vertx-microservice-workshop/portfolio-service
+    links:
+     - quotegenerator:CONSOLIDATION
+    environment:
+     - CONSOLIDATION_NAME=/portfolio/CONSOLIDATION
+     - CONSOLIDATION_ENV_SERVICE_TYPE=http-endpoint
+     - CONSOLIDATION_PORT=tcp://CONSOLIDATION:8080
+    depends_on:
+     - quotegenerator
+  traders:
+    image: vertx-microservice-workshop/compulsive-traders
+    depends_on:
+     - portfolio
+  audit:
+    image: vertx-microservice-workshop/audit-service
+    container_name: audit
+    ports:
+     - "8082:8080"
+    depends_on:
+     - portfolio
+  dashboard:
+    image: vertx-microservice-workshop/trader-dashboard
+    ports:
+     - "8083:8080"
+    links:
+     - audit:AUDIT
+    environment:
+     - AUDIT_NAME=/audit/AUDIT
+     - AUDIT_ENV_SERVICE_TYPE=http-endpoint
+     - AUDIT_PORT=tcp://AUDIT:8080
+    depends_on:
+     - audit
