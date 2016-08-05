@@ -2,7 +2,7 @@
 
 This repository contains a module with an implementation of the dashboard built with [Vaadin](http://vaadin.com).
 
-!(docs/images/vertx-vaadin-dashboard.png)
+![Vaadin dashboard](/docs/images/vertx-vaadin-dashboard.png)
 
 
 The dashboard is implemented as a Verticle with Vaadin support; before building the project you should
