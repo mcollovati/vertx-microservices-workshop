@@ -5,9 +5,9 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Notification;
 import io.vertx.workshop.dashboard.DashboardUI;
 
-public abstract class DashboardComponent extends CustomComponent {
+public abstract class DashboardWidget extends CustomComponent {
 
-    public DashboardComponent() {
+    public DashboardWidget() {
         setWidth("100%");
         setStyleName("block");
         setCompositionRoot(createContent());

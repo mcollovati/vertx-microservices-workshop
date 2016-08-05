@@ -3,27 +3,23 @@ package io.vertx.workshop.dashboard.ui;
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.IndexedContainer;
-import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.themes.ValoTheme;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.web.RoutingContext;
 import io.vertx.servicediscovery.types.HttpEndpoint;
-import io.vertx.workshop.dashboard.DashboardUI;
 import org.vaadin.viritin.label.MLabel;
 
 /**
  * Created by marco on 31/07/16.
  */
-public class LastOperations extends DashboardComponent {
+public class LastOperationsWidget extends DashboardWidget {
 
     private Table operationsTable;;
     private long timerID;
 
-    public LastOperations() {
+    public LastOperationsWidget() {
         setCaption("LAST OPERATIONS");
     }
 

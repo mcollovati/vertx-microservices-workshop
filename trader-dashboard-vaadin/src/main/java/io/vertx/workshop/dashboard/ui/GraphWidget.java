@@ -24,25 +24,24 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * Created by marco on 31/07/16.
  */
-public class Graph extends DashboardComponent {
+public class GraphWidget extends DashboardWidget {
 
     private long timerID;
     private Chart chart;
     private AtomicInteger xAxisCounter;
-    private LinkedHashMap<String, Integer> quotes;
+    private LinkedHashMap<Company, Integer> quotes;
 
     private void initQuotes() {
         quotes = new LinkedHashMap<>();
-        quotes.put("divinator", 0);
-        quotes.put("blackcoat", 0);
-        quotes.put("macrohard", 0);
+        Stream.of(Company.values())
+            .forEach( c -> quotes.put(c, 0) );
     }
 
     @Override
@@ -55,7 +54,6 @@ public class Graph extends DashboardComponent {
         final Configuration configuration = chart.getConfiguration();
         configuration.getChart().setType(ChartType.AREASPLINE);
         configuration.getTitle().setText("");
-        //configuration.getTooltip().setEnabled(false);
         configuration.getLegend().setEnabled(false);
 
         PlotOptionsArea plotOptions = new PlotOptionsArea();
@@ -72,23 +70,16 @@ public class Graph extends DashboardComponent {
 
         XAxis xAxis = new XAxis();
         Labels labels = new Labels();
-        // Display x axis value (year) as non formatted integer
         labels.setFormatter("this.value");
         xAxis.setLabels(labels);
         xAxis.setAllowDecimals(false);
         xAxis.setType(AxisType.CATEGORY);
-
-//        xAxis.setTickPixelInterval(100);
-//        xAxis.setTickInterval(100);
-//        xAxis.setTickLength(100);
         configuration.addxAxis(xAxis);
 
 
         YAxis yAxis = new YAxis();
         yAxis.setTitle("");
-        //yAxis.setTitle(new AxisTitle("Nuclear weapon states"));
         labels = new Labels();
-        // display y axis value in kilos as there is such a pile of weapons
         labels.setFormatter("this.value");
         yAxis.setLabels(labels);
         configuration.addyAxis(yAxis);
@@ -100,7 +91,9 @@ public class Graph extends DashboardComponent {
         xAxisCounter = new AtomicInteger(10);
 
 
-        List<Series> series = quotes.keySet().stream().map(DataSeries::new).collect(Collectors.toList());
+        List<Series> series = quotes.keySet().stream()
+            .map(Company::toString)
+            .map(DataSeries::new).collect(Collectors.toList());
         series.stream().map(DataSeries.class::cast)
             .forEach(s -> s.setData(new ArrayList<>(initialData)));
 
@@ -116,8 +109,8 @@ public class Graph extends DashboardComponent {
             JsonObject quote = event.body();
             Integer price = quote.getInteger("bid", 0);
             String name = quote.getString("name", "").toLowerCase().replace(" ", "");
-            quotes.computeIfPresent(name, (q, oldPrice) -> price);
-            //quotes.getOrDefault(name, new AtomicInteger()).set(price);
+            Company.fromName(quote.getString("name", ""))
+                .ifPresent(c -> quotes.computeIfPresent(c, (q, oldPrice) -> price));
         });
         updateChart();
 
@@ -132,8 +125,6 @@ public class Graph extends DashboardComponent {
             List<Series> series = chart.getConfiguration().getSeries();
             List<Integer> currentQuotes = new ArrayList<>(quotes.values());
             Integer currentCounter = xAxisCounter.incrementAndGet();
-
-            System.out.println("============== CURRENT QUOTES " + currentQuotes);
             IntStream.range(0, currentQuotes.size())
                 .forEach(idx -> {
                     DataSeries l = ((DataSeries) series.get(idx));

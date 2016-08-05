@@ -10,7 +10,6 @@ import io.vertx.servicediscovery.Status;
 import org.vaadin.viritin.fields.MTable;
 import org.vaadin.viritin.label.MLabel;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,13 +18,13 @@ import static java.util.Collections.emptyList;
 /**
  * Created by marco on 31/07/16.
  */
-public class ServicesList extends DashboardComponent {
+public class ServicesListWidget extends DashboardWidget {
 
     private long timerID;
     private MTable<Record> table;
 
-    public ServicesList() {
-        setCaption("Available Services");
+    public ServicesListWidget() {
+        setCaption("AVAILABLE SERVICES");
     }
 
     @Override
@@ -93,6 +92,7 @@ public class ServicesList extends DashboardComponent {
     private void fillServicesTable(List<Record> records) {
         getUI().access(() -> {
             table.setBeans(records);
+            table.setPageLength(records.size());
         });
     }
 }

@@ -1,0 +1,13 @@
+$v-font-size: 14px;
+
+@import "addons.scss";
+@import "../valo/valo.scss";
+
+// Prefix all selectors in your theme with .demo
+.dashboard {
+
+    @include addons;
+    // Include valo theme styles in your theme
+    @include valo;
+
+}
