@@ -20,7 +20,6 @@ services:
      - portfolio
   audit:
     image: vertx-microservice-workshop/audit-service
-    container_name: audit
     ports:
      - "8082:8080"
     depends_on:
@@ -29,6 +28,18 @@ services:
     image: vertx-microservice-workshop/trader-dashboard
     ports:
      - "8083:8080"
+    links:
+     - audit:AUDIT
+    environment:
+     - AUDIT_NAME=/audit/AUDIT
+     - AUDIT_ENV_SERVICE_TYPE=http-endpoint
+     - AUDIT_PORT=tcp://AUDIT:8080
+    depends_on:
+     - audit
+  dashboard:
+    image: vertx-microservice-workshop/trader-dashboard-vaadin
+    ports:
+     - "8084:8080"
     links:
      - audit:AUDIT
     environment:
