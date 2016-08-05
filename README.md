@@ -1,9 +1,25 @@
+# Disclaimer
+
+This is a fork of the original workshop project with the intent to add a clone of the dasboard 
+implemented with [Vaadin](http://vaadin.com) running on Vert.x. 
+Vaadin vertx module is experimental so it can be unstable; please report any issue you might experience 
+on [vaadin-vertx-sample repository](https://github.com/mcollovati/vaadin-vertx-samples/issues).
+
+Missing code from original project is here already implemented.
+In addition you will find also a docker-compose file and the [instructions](docker-compose.md) to run all containers 
+with a single command.
+
+After completing the all instructions of the original workshop, follow the [documentation](vaadin-dashboard.md) to build 
+and run the container with Vaadin dashboard.
+
+
 # Vert.x - From zero to (micro-) hero.
 
 This repository is a lab about vert.x explaining how to build distributed _microservice_ reactive applications using 
 Vert.x.
 
 Instructions are available on http://vertx-lab.dynamis-technologies.com
+
 
 Complete code is available in the `solution` directory.
 

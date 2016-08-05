@@ -20,6 +20,8 @@ import io.vertx.servicediscovery.spi.ServicePublisher;
 import io.vertx.servicediscovery.types.EventBusService;
 import io.vertx.workshop.portfolio.PortfolioService;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 
 @VaadinServletConfiguration(productionMode = false, ui = DashboardUI.class)
 public class DashboardVaadinVerticle extends VaadinVerticle {
@@ -46,6 +48,7 @@ public class DashboardVaadinVerticle extends VaadinVerticle {
 
 
 
+
         super.start(starter);
 
         CompositeFuture.all(starter, portfolioFuture).setHandler(ar -> {
@@ -63,4 +66,6 @@ public class DashboardVaadinVerticle extends VaadinVerticle {
     protected SessionStore createSessionStore() {
         return LocalSessionStore.create(vertx);
     }
+
+
 }
