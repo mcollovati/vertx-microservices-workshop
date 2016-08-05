@@ -2,7 +2,7 @@
 
 This is a fork of the original workshop project with the intent to add a clone of the dasboard 
 implemented with [Vaadin](http://vaadin.com) running on Vert.x. 
-Vaadin vertx module is experimental so it can be unstable; please report any issue you might experience 
+Vaadin vertx module is **highly experimental** so it can be unstable; please report any issue you might experience 
 on [vaadin-vertx-sample repository](https://github.com/mcollovati/vaadin-vertx-samples/issues).
 
 Missing code from original project is here already implemented.
