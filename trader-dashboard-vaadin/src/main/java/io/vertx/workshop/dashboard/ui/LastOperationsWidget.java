@@ -16,7 +16,8 @@ import org.vaadin.viritin.label.MLabel;
  */
 public class LastOperationsWidget extends DashboardWidget {
 
-    private Table operationsTable;;
+    private Table operationsTable;
+    ;
     private long timerID;
 
     public LastOperationsWidget() {
@@ -51,9 +52,8 @@ public class LastOperationsWidget extends DashboardWidget {
     }
 
 
-
     private void lastOperations() {
-        HttpEndpoint.getClient(getUI().verticle().getDiscovery(), new JsonObject().put("name", "AUDIT"), client -> {
+        HttpEndpoint.getClient(getUI().getServiceDiscovery(), new JsonObject().put("name", "AUDIT"), client -> {
             if (client.failed() || client.result() == null) {
                 noAuditService();
             } else {

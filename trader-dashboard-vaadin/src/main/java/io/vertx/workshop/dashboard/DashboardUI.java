@@ -1,6 +1,7 @@
 package io.vertx.workshop.dashboard;
 
 import com.github.mcollovati.vertx.vaadin.VertxVaadinService;
+import com.hazelcast.spi.discovery.integration.DiscoveryService;
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
@@ -8,6 +9,10 @@ import com.vaadin.annotations.Viewport;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.UI;
 import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonObject;
+import io.vertx.servicediscovery.ServiceDiscovery;
+import io.vertx.servicediscovery.ServiceDiscoveryOptions;
+import io.vertx.servicediscovery.docker.DockerLinksServiceImporter;
 import io.vertx.workshop.dashboard.ui.GraphWidget;
 import io.vertx.workshop.dashboard.ui.LastOperationsWidget;
 import io.vertx.workshop.dashboard.ui.PortfolioWidget;
@@ -26,23 +31,14 @@ import org.vaadin.viritin.layouts.MVerticalLayout;
 @Viewport("width=device-width, initial-scale=1.0")
 public class DashboardUI extends UI {
 
+    private ServiceDiscovery serviceDiscovery;
+    private PortfolioService portfolioService;
 
     @Override
     protected void init(VaadinRequest request) {
-        /*
-        MGridLayout content = new MGridLayout().withFullWidth()
-            .withStyleName("dashboard")
-            .withMargin(true).withSpacing(true);
 
-        content.setColumns(3);
-        content.setRows(2);
-        content.addComponent(new PortfolioWidget(), 0, 0);
-        content.addComponent(new GraphWidget(), 1, 0);
-        //content.addComponent(new LastOperationsWidget(), 1, 0, 1, 1);
-        content.addComponent(new LastOperationsWidget(), 2, 0);
-        content.addComponent(new ServicesListWidget(), 0, 1, 2, 1);
-        setContent(content);
-        */
+        VertxVaadinService vertxVaadinService = (VertxVaadinService)request.getService();
+
         PortfolioWidget portfolioWidget = new PortfolioWidget();
         GraphWidget graphWidget = new GraphWidget();
         LastOperationsWidget lastOperationsWidget = new LastOperationsWidget();
@@ -56,17 +52,29 @@ public class DashboardUI extends UI {
         ).withFullWidth().withMargin(true).withSpacing(true));
     }
 
+    // TODO: don't like this, find a better way
+    void injectServices(ServiceDiscovery serviceDiscovery, PortfolioService portfolioService) {
+        this.serviceDiscovery = serviceDiscovery;
+        this.portfolioService = portfolioService;
+    }
+
     public Vertx getVertx() {
         return getService().getVertx();
     }
 
-    public PortfolioService getPortolioService() {
-        return verticle().getPortfolio();
+    public ServiceDiscovery getServiceDiscovery() {
+        return serviceDiscovery;
     }
 
+    public PortfolioService getPortolioService() {
+        return portfolioService;
+    }
+
+    /*
     public DashboardVaadinVerticle verticle() {
         return (DashboardVaadinVerticle) getService().getVerticle();
     }
+    */
 
     private VertxVaadinService getService() {
         return ((VertxVaadinService) getSession().getService());

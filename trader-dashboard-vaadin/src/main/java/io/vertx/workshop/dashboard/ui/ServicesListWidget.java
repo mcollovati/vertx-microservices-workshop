@@ -78,7 +78,7 @@ public class ServicesListWidget extends DashboardWidget {
 
 
     private void listServices() {
-        getUI().verticle().getDiscovery().getRecords(new JsonObject(), ar -> {
+        getUI().getServiceDiscovery().getRecords(new JsonObject(), ar -> {
             if (ar.failed()) {
                 onError(ar.cause());
                 fillServicesTable(emptyList());
